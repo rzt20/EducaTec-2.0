@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "241239828262",
+    "project_id": "educatec-5c0e0",
+    "storage_bucket": "educatec-5c0e0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241239828262:android:f0eec78d8c8777e3b7c3e7",
+        "android_client_info": {
+          "package_name": "com.example.educatec"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYy7jPx04w83m6KsWBeA0WkMT0XZtyCFw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

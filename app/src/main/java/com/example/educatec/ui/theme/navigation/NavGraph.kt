@@ -1,11 +1,13 @@
 package com.example.educatec.ui.theme.navigation
 
+
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.educatec.ui.screens.LoginScreen
+import com.example.educatec.screens.LoginScreen
 import com.example.educatec.screens.HomeScreen
+import com.example.educatec.screens.RegisterScreen
 
 @Composable
 fun NavGraph(navController: NavHostController) {
@@ -18,6 +20,9 @@ fun NavGraph(navController: NavHostController) {
         }
         composable(Routes.HOME) {
             HomeScreen()
+        }
+        composable(Routes.REGISTER) {
+            RegisterScreen(navController)
         }
     }
 }

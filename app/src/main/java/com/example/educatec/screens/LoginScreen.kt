@@ -1,4 +1,4 @@
-package com.example.educatec.ui.screens
+package com.example.educatec.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,108 +13,158 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.educatec.ui.theme.navigation.Routes
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun LoginScreen(navController: NavHostController) {
 
     var usuario by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
+    var usuarioError by remember { mutableStateOf(false) }
+    var contrasenaError by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var isLoading by remember { mutableStateOf(false) }
+    val auth = FirebaseAuth.getInstance()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFEFF6FF)),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // 🌥️ Nubes
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFEFF6FF)),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("☁️", fontSize = 48.sp)
-            Text("☁️", fontSize = 64.sp)
-        }
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // 🌥️ Nubes
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Text("☁️", fontSize = 48.sp)
+                Text("☁️", fontSize = 64.sp)
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
 
 
-        Text(
-            text = "Aprende jugando",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // 🔐 Iniciar sesión
-        Text(
-            text = "Iniciar sesión",
-            fontSize = 16.sp,
-            color = Color.Black
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // 👤 Usuario
-        OutlinedTextField(
-            value = usuario,
-            onValueChange = { usuario = it },
-            label = { Text("Usuario") },
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // 🔒 Contraseña
-        OutlinedTextField(
-            value = contrasena,
-            onValueChange = { contrasena = it },
-            label = { Text("Contraseña") },
-            singleLine = true,
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp)
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // 🔘 Botón
-        Button(
-            onClick = {
-                navController.navigate("home")
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp)
-        ) {
-            Text("Entrar")
-        }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        // 📝 Registro
-        Row {
-            Text(text = "¿Aún no tienes cuenta? ")
             Text(
-                text = "Regístrate aquí",
-                color = Color(0xFF1E88E5),
-                modifier = Modifier.clickable {
-                    // navController.navigate(Routes.REGISTER)
-                }
+                text = "Aprende jugando",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // 🔐 Iniciar sesión
+            Text(
+                text = "Iniciar sesión",
+                fontSize = 16.sp,
+                color = Color.Black
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // 👤 Usuario
+            OutlinedTextField(
+                value = usuario,
+                onValueChange = {
+                    usuario = it
+                    usuarioError = false
+                    errorMessage = null
+                },
+                label = { Text("Usuario") },
+                singleLine = true,
+                isError = usuarioError,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 🔒 Contraseña
+            OutlinedTextField(
+                value = contrasena,
+                onValueChange = {
+                    contrasena = it
+                    contrasenaError = false
+                    errorMessage = null
+                },
+                label = { Text("Contraseña") },
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                isError = contrasenaError,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp)
+            )
+
+            errorMessage?.let {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(horizontal = 32.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // 🔘 Botón
+            Button(
+                onClick = {
+                    usuarioError = usuario.isBlank()
+                    contrasenaError = contrasena.isBlank()
+                    if (usuarioError || contrasenaError) {
+                        errorMessage = "Por favor, complete todos los campos."
+                    } else {
+                        isLoading = true
+                        auth.signInWithEmailAndPassword(usuario, contrasena)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    navController.navigate(Routes.HOME)
+                                } else {
+                                    errorMessage = task.exception?.message ?: "Error de autenticación"
+                                }
+                                isLoading = false
+                            }
+                    }
+                },
+                enabled = !isLoading,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp)
+            ) {
+                Text("Entrar")
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            // 📝 Registro
+            Row {
+                Text(text = "¿Aún no tienes cuenta? ")
+                Text(
+                    text = "Regístrate aquí",
+                    modifier = Modifier.clickable {
+                        navController.navigate(Routes.REGISTER)
+                    }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // 🌳 Árbol
+            Text("🌳", fontSize = 64.sp)
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // 🌳 Árbol
-        Text("🌳", fontSize = 64.sp)
+        if (isLoading) {
+            CircularProgressIndicator()
+        }
     }
 }
