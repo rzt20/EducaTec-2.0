@@ -5,9 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.educatec"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.educatec"
@@ -43,18 +41,25 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     
+    // Biometría y Fragments
+    implementation("androidx.biometric:biometric:1.1.0")
+    implementation("androidx.fragment:fragment-ktx:1.8.5")
+    
+    // Seguridad y Almacenamiento Cifrado (NUEVO)
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+
     // Compose Bill of Materials (BOM)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    implementation("androidx.compose.material:material-icons-extended") // ¡CORREGIDO!
+    implementation("androidx.compose.material:material-icons-extended")
 
     // Retrofit para networking
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.retrofit2:converter-scalars:2.9.0") // AÑADIDO
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 

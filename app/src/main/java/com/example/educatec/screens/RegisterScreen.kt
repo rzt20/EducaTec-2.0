@@ -33,6 +33,20 @@ fun RegisterScreen(navController: NavHostController) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
+    // Configuración de colores forzada a Negro
+    val textFieldColors = OutlinedTextFieldDefaults.colors(
+        focusedTextColor = Color.Black,
+        unfocusedTextColor = Color.Black,
+        disabledTextColor = Color.Black,
+        focusedLabelColor = Color.Black,
+        unfocusedLabelColor = Color.Black,
+        cursorColor = Color.Black,
+        focusedBorderColor = Color.Black,
+        unfocusedBorderColor = Color.Gray,
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+    )
+
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
             modifier = Modifier
@@ -47,14 +61,15 @@ fun RegisterScreen(navController: NavHostController) {
             Text(
                 text = "Crear cuenta",
                 fontSize = 32.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = "Regístrate para comenzar",
-                color = Color.DarkGray
+                color = Color.Black
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -63,12 +78,13 @@ fun RegisterScreen(navController: NavHostController) {
             OutlinedTextField(
                 value = nombre,
                 onValueChange = { nombre = it },
-                label = { Text("Nombre") },
+                label = { Text("Nombre", color = Color.Black) },
                 singleLine = true,
                 enabled = !isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
+                    .padding(horizontal = 32.dp),
+                colors = textFieldColors
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -77,12 +93,13 @@ fun RegisterScreen(navController: NavHostController) {
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Correo electrónico") },
+                label = { Text("Correo electrónico", color = Color.Black) },
                 singleLine = true,
                 enabled = !isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
+                    .padding(horizontal = 32.dp),
+                colors = textFieldColors
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -91,13 +108,14 @@ fun RegisterScreen(navController: NavHostController) {
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Contraseña") },
+                label = { Text("Contraseña", color = Color.Black) },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 enabled = !isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
+                    .padding(horizontal = 32.dp),
+                colors = textFieldColors
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -106,13 +124,14 @@ fun RegisterScreen(navController: NavHostController) {
             OutlinedTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
-                label = { Text("Confirmar contraseña") },
+                label = { Text("Confirmar contraseña", color = Color.Black) },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 enabled = !isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
+                    .padding(horizontal = 32.dp),
+                colors = textFieldColors
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -163,7 +182,8 @@ fun RegisterScreen(navController: NavHostController) {
             // 🔙 Volver
             Text(
                 text = "¿Ya tienes cuenta? Inicia sesión",
-                color = if(isLoading) Color.Gray else Color(0xFF1E88E5),
+                color = Color.Black,
+                fontWeight = FontWeight.Medium,
                 modifier = Modifier.clickable(enabled = !isLoading) {
                     navController.navigate(Routes.LOGIN)
                 }
